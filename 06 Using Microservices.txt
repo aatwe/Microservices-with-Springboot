@@ -1,0 +1,42 @@
+How we created Contact manager project? Spring boot 
+
+	How? monolithic
+
+	What done?
+		login
+		get user using id
+		add contacts in backend
+		check your contacts
+
+Now we use microservices
+Objective:
+
+1) Create User service //microservice
+	//how will we call? ip and port
+
+2) Create contact service //microservice
+	//how will we call?ip and port
+
+3) Create API Gateway	 //also a microservice						//Single End point
+	//handles multiple multiple microservice calls
+
+4) Communicate User service with contact service
+
+
+5) Register 3 microservices in Eureka Service Registry
+		//Register in Eureka Server
+		//to remove dependency in intercommunication 
+		// 
+
+Test:
+Client sends request to API Gateway
+according to what route client accessing
+
+ if /user -> UserService
+ if /contact -> ContactService
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+

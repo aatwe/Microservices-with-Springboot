@@ -1,0 +1,39 @@
+//each MS has urls to access: routes
+//each ms running on different servers
+
+
+//What API gateway does? single entry point for client requests	//one interface to customer
+		//Client wont know how many services in backend	
+		//All client needs? API Gateway IP, Port
+
+///What other advantages of API gateway?
+	can do authentication,Security  here only
+	
+	How to implement API gateway? Zuul server , Spring Cloud gateway
+
+_________________________________________________
+1)		//Hystrix Dashboard  //Fault ltolerance library //if any service goes down
+								//circuit breaker design pattern
+2)									|
+			/m1						|
+		  --------->    MS#1 //Product		|
+		 /							|
+		/	/m2						|
+API		----------->	MS#2 //Card		|	  Github
+Gateway								|		|
+		\    /m3						|5)		|
+		 \--------->	MS#3 //Shipment		| < --config server		
+__________________________________________________
+
+
+3)
+
+		//Eureka Services Discovery  //Using this service: we can register other services on eureka server
+		//what is this search registry //one point to know about other services //forex base url,name etc
+		//What is eureka server? Also a microservice
+
+				//services that we register = eureka client
+4)
+		What is config server? if any common configuration that all 3 microservices using
+							save on config server
+				//when needed fetch using config server

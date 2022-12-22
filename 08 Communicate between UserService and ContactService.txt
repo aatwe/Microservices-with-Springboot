@@ -1,0 +1,123 @@
+How? REST Template //Synchronously
+
+
+How to call rest template?
+
+
+a) Declare rest template as bean
+
+UserServiceApplication.java
+
+
+package com.user; V
+
+Iimport ...
+
+@SpringBootApplication
+
+public class UserServiceApplication {
+
+public static void main(String[] args) { SpringApplication.run(UserServiceApplication.class, args...)
+
+@Bean
+public RestTemplate restTemplate()				//return type RestTemplate : helps call different microservice url
+{
+	return new RestTemplate();
+	
+}
+
+}
+
+
+b) Autowire in UserController.java
+	b.1) How to call url using user id?
+		this.restTemplate.getForObject("//pass your url here", List.class);
+			//Also pass the type:List.class		//This will deserialize the array we send from contact into List object
+			//store it in List contacts
+		
+
+	b.2) How to avoid hard coding url?
+	dynamically append userid in url
+	
+
+	List contacts = this.restTemplate.getForObject("//http://localhost:9002/contact/user/"+ userId
+OR	
+	//http://localhost:9002/contact/user/"+ user.getuserId()
+
+
+	b.3) How to save User user in List contacts?
+		pass contacts list in user.setContacts(contacts);
+				return user;
+
+
+	What objective achieved? Used Rest Template to contact between 2 services		//MICROSERVICES COMMUNICATION
+	//Frontend user will call {userId}
+
+
+
+	b.4) What issue? local host is still hardocoded, if 1000s of microservices running -> not good
+	Solution: Eureka server for service registry --> will make it dynamic
+
+
+	b.5) Restart & Test
+	//Run UserController.java
+	
+	//http://localhost:9002/contact/user/1314
+
+	//User wont know data from 2 services 
+
+	{
+	 "userId": 1314,
+
+	 "name": "Ravi Tiwari",
+
+	 "phone": "888",
+
+	 "contacts": [
+
+	 "cId: 4,
+	
+	 "email": "sameer@gmail.com",
+	
+	 "contactName": "Sameer",
+	 
+	"userId": 1314
+	}
+  }
+
+}
+
+	b.6) What left? Creatae Eureka server, Eureka client create ,Create api gateway
+			Registering services on server
+		
+
+////////////////////////////////////////////////////////////////////////
+
+	package com.user.controller;
+
+		import org.springframework.web.bind.annotation.RequestMapping;
+		import org.springframework.web.bind.annotation.RestController;
+		@RestController
+		@RequestMapping("/user")			//this will work on /user fire
+		public class UserController {
+		
+			@Autowired
+			private UserService userService;								//Autowire for using the userService service
+
+			@Autowired												//Autowire 
+			private RestTemplate restTemplate;
+
+			@GetMapping("/{userId}")		//basically /user/userId 
+			public User getUser(@PathVariable("userId") Long userId) {			//how to fetch userId?@PathVariable variable
+																//how to use service? autowire 
+				User user = this.userService.getUser(userId);														//O/P? user
+				//http://localhost:9002/contact/user/1311
+		
+				List contacts = this.restTemplate.getForObject("//http://localhost:9002/contact/user/"+ user.getuserId(), List.class);
+				user.setContacts(contacts);
+
+				return user;
+				}																
+		}
+
+

@@ -1,0 +1,9 @@
+1) How? HTTP
+	 How did we sent request from server to client using ReST API? JSON
+		serialize and desrialize json data
+
+			HTTP
+MS#1	  ----------------------	MS#2
+		REST		json
+
+

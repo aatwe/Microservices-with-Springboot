@@ -1,0 +1,31 @@
+Objective: 
+What is monolithic architecture
+
+Advantages and Disadvantages of Monolithic Application
+What is microservices?
+
+How to implement api gateway
+
+How to implement eureka server
+
+
+
+Advantages of Microservices
+
+Microservices Architecture
+
+How microservices intercommunicate? build? How two microservices communicate with each other
+Use case Practical Work..
+
+
+
+What can we use to create microservices? django, nodejs, multistack
+
+What prerequisite?
+
+	Springboot
+	Monolithic architecture	//normal spring boot //ecommerce	
+
+
+
+

@@ -1,0 +1,36 @@
+What are microservices 
+//monolithic: tightly coupled
+
+a.1)microservices:  modules working together	//decoupled
+
+a.2) how services communicate? http (light weight protocols)
+
+
+
+a.3)
+ex various micro services loosely coupled
+	each have their own code base
+
+
+how they communicate? send json data using REST API
+
+//prod		//shipment		//card
+
+Ms#1	 <--->	Ms#2   <--->	Ms#3
+
+ |			 |			 |
+
+DB			DB			DB
+  
+
+//Every service will be diferent project
+
+
+
+What advantage?
+
+a) can update each service individually
+
+b) if one down, doesnt impact others
+
+c) can choose different tech for different service

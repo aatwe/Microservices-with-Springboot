@@ -1,0 +1,67 @@
+Microservices used by huge teams with modules
+
+Monolithic = single code base with multiple modules
+
+How we handle request in Monolithic arch?
+
+
+1) Controller (Presentation layer)
+
+2) services: 	//services layer	//what is this? business logic
+	service#1
+	
+	service#2
+	
+	service#2
+
+	
+3) DB layer : 		//database layer	//what dao do? communicate with database
+ 	service#1
+		dao#1		//database layer //persistence layer
+
+	service#2
+		dao#2		//database layer //persistence layer
+
+	service#2
+		dao#3		//database layer //persistence layer
+
+4) DB
+
+
+1,2,3,4 are in a container: Single code base--> with multiple modules
+		jar file created for the container box
+			jar file deployed on server
+				Application gets stored on server
+					Client access how? rewquest url endpoints for respective services
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+What if we run multiple isntance of single project on different server?
+	Still monolithic  //instance#1 and instance#2 cant communicate
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Why Microservices?
+Q2) What disadvantages of monolithic architecture?
+
+large scaling is difficult to manage
+if single change -> entire application has to redeployed //single code base //
+difficult to change technology
+	//microservices -> module can easily change tech
+	1 modules can use different tech
+		communicate by json/http standard
+
+single bug can down an entire app
+
+
+
+Q3) What advantages of monolithic Application
+
+
+single jar file to build and deploy //single server
+	if weerent => api gateway different servers would be needed
+
+less network latency
+
+
+Q4) What use of spring boot? create services
+

@@ -1,0 +1,612 @@
+A) Create UserService //performs what? user related operations
+
+
+a.1) Google -> Spring initilaizer
+	Project: maven project
+	Spring boot: 2.4.4
+	
+	group: com.user
+	Artifact: user_service
+	Name: user_service
+	Description: This microservice is for user related operations
+	package name : com.user
+	packaging: jar
+	java: 11
+
+	Add dependencies -> Spring Web  
+
+	=> Generate
+	//download user_service.zip
+
+
+a.2) What files in project:
+
+.mvn
+
+src
+.gitignore
+HELP.md
+mvnw
+mvnw.cmd
+pom.xm|
+
+
+a.3) Open project in shell or paste "cmd" in file path
+
+>idea64 .
+
+//proejct opened in ide
+
+
+a.4) What spring project structure looks like:
+
+
+V I: user_service C12,, 331': 1,5653%: .1: .. 10.- gage
+> .idea
+> .mvn
+V src
+V main
+	java
+	  com.user
+		UserServiceApplication
+  resources
+	static
+	templates
+	applicationproperties
+  test
+  .gitignore
+  HELP.md
+  mvnw
+  mvnw.cmd
+  pomxml
+  user_service.iml
+External Libraries
+Scratches and Consoles
+
+
+
+a.5) in resources -> applicationproperties 	//alternative: use application.yml
+
+Objective: Define port using yml file or application.properties
+
+application.properties
+
+	server.port=9001
+
+
+----------------------
+
+application.yml
+server:
+  port:9001
+
+
+
+a.6) Run service
+
+UserSeviceApplication.java
+
+//Tomcat started on 8080
+//Spring stated
+
+
+
+
+a.7) Create fake service
+
+
+		a.7.1) Create endpoint
+				/user/1344
+
+								//1344 is user's id, how to fetch this user's detail
+								//every user has contacts, we have to fetch for particular user
+
+
+			a.7.1.1) Create class User.java
+
+		package com.user.entity;
+
+		import java.util.List;
+
+		public class User {
+			private Long userId;
+			private String name;
+			private String phone;
+		
+			List<Contact> contacts = new ArrayList<>();			//this contact data is fetched from different service
+			public User(Long userId, String name, String phone, List<Contact> contacts {
+				this.userId = userId;
+				this.name = name;
+				this.phone = phone;
+				this.contacts = contacts;
+			}
+
+			public User(Long userId, String name, String phone) d
+				this.userId = userId;
+				this.name = name;
+				this.phone = phone;
+			}
+			//Create constructor without list also
+			public User(LongluserId, String name, String phone) {
+				this.userId = userId;
+				this.name = name;
+				this.phone = phone;
+
+			}
+		
+			public User() {}
+			//getters
+			public Long getUserId() d
+				return userId;
+			}
+			public Long getname() {
+				return name;
+			}
+			public Long getphone() {
+				return phone;
+			}
+
+			//setters
+			public Long setUserId() d
+				this.userId =  userId;
+			}
+
+
+
+		a.7.1.2) Create contact.java class in com.user.entity  //for List<Contact>
+			//What will this service do? perform operations related to Users , not contact
+									//List<Contact> is filled using different microservice
+
+	package com.user.entity;
+		...
+		public class Contact {
+		private Long cId;
+		private String email;
+		private String contactName;
+		private Long userId;
+		public Contact(Long cId, String email, String contactName, Long userId) {
+			this.cId = cId;
+			this.email = email;
+			this.contactName = contactName;
+			this.userId = userId;
+		}
+		public Contact() {
+		}
+	//getters
+		public Long getcId() {
+			return cId;
+		}
+	//...
+	//setters
+
+	//...
+		
+}
+
+
+	a.7.1.3)	Create package in com.user ===> com.user.service
+
+		a.7.1.3.1) Create new interface: UserService
+	
+
+		package com.user.service;
+		import com.user.entity.User;
+
+				//Declare what methods we will need in UserService.java
+
+				//Create method that , takes input: user id, output:returns user object   //getUser(Long id);
+
+				public User getUser(Long id);
+
+			}
+
+
+		a.7.1.3.2) Create UserServiceImpl.java
+
+		import com.user.entity.User; 
+		import java.util.List;
+
+
+		@Service		//Spring container will know this is service // will create object and auto wire
+		public class UserServiceImpl implements UserService {
+				//fake user list
+				List<User> list = List.of(									//List of User //List of contact already created in User.java 
+																	//this is fake, actually retrieved from database
+				 new User(userId:1311L, name:"Durgesh Tiwari", phone:"23525625")		//create users
+				 new User(userId:1312L, name:"Ankit Tiwari", phone:"99999")
+				 new User(userId:1314L, name:"Ravi Tiwari", phone:"888")
+			);
+
+		@Override
+		public User getUser(Long id) {		//returns passed userid's user data
+		return this.list.stream().filter(user -> user.getUserId().equals(id).findAny().orElse(null));			//filter out things fom object : if user id = id
+				//returns what ? 1-1 users of the list
+	}
+}
+
+
+
+
+	a.7.1.4) Create package com.user.controller in com.user
+		    Create UserController class
+
+		package com.user.controller;
+
+		import org.springframework.web.bind.annotation.RequestMapping;
+		import org.springframework.web.bind.annotation.RestController;
+		@RestController
+		@RequestMapping("/user")			//this will work on /user fire
+		public class UserController {
+		
+			@Autowired
+			private UserService userService;								//Autowire for using the userService service
+
+
+			@GetMapping("/{userId}")		//basically /user/userId 
+			public User getUser(@PathVariable("userId") Long userId) {			//how to fetch userId?@PathVariable variable
+				return this.userService.getUser(userId);						//how to use service? autowire 
+																		//O/P? user
+			}														//after autowiring we can return this.userService.getUser(userId);			
+		}
+
+	a.7.1.5) check controller, entity, service
+
+What project structure looks like
+user_service 
+	.idea
+	.mvn
+	 src
+		main
+		java
+		com.user
+		controller
+			UserController ,
+	 	entity
+			Contact
+			User
+		service
+			UserService
+			UserServiceImpl
+			UserServiceApplicatio
+		resources
+			static
+			templates
+			applicationproperties
+			application.yml
+		test
+		target
+		.gitignore
+		HELP.md
+		mvnw
+		mvnw.cmd
+		pom.xm|
+		user_service.iml
+	External Libraries
+	Scratches and Consoles
+
+
+	a.7.1.6) Run project
+		UserServiceApplication.java
+		//Run ->
+
+	//Spring boot application will run on 9001 port
+//localhost:9001/user/1311
+{
+
+  "userId": 1311,
+
+  "name": "Durgesh Tiwari",
+  "phone": "23525625",
+
+  "contacts": []
+
+}
+		
+//localhost:9001/user/1312
+{
+
+  "userId": 1312,
+
+  "name": "Ankit Tiwari",
+  "phone": "99999",
+
+  "contacts": []
+
+}
+
+//no contacts yet
+
+Objective achieved:set up basic spring boot with 1 service and fetch fake users from UserServiceImpl.java onto client browser via url
+how mapped id on url ? 	@GetMapping("/{userId}")		//basically /user/userId 
+				@GetMapping("/{userId}")		//basically /user/userId 
+			public User getUser(@PathVariable("userId") Long userId) {			//how to fetch userId?@PathVariable variable
+				return this.userService.getUser(userId);						//how to use service? autowire 
+																		//O/P? user
+			}														//after autowiring we can return this.userService.getUser(userId);			
+
+
+
+_______________________________________________________________________________________________________________________________________________________________
+A) Create ContactService //performs what? contact related operations
+
+
+a.1) Google -> Spring initilaizer
+	Project: maven project
+	Spring boot: 2.4.4
+	
+	group: com.contact
+	Artifact: contact_service
+	Name: contact_service
+	Description: This microservice is for contact related operations
+	package name : com.contact
+	packaging: jar
+	java: 11
+
+	Add dependencies -> Spring Web  
+
+	=> Generate
+	//download contact_service.zip
+
+
+a.2) What files in project:
+
+.mvn
+
+src
+.gitignore
+HELP.md
+mvnw
+mvnw.cmd
+pom.xm|
+
+
+a.3) Open project in shell or paste "cmd" in file path
+
+>idea64 .
+
+//project opened in ide
+
+
+a.4) What spring project structure looks like:	//note this is new instance	 //both projects run parallel
+
+
+contact_service C12,, 331': 1,5653%: .1: .. 10.- gage
+.idea
+.mvn
+src
+main
+	java
+	  com.user
+		ContactServiceApplication
+  resources
+	static
+	templates
+	applicationproperties
+  test
+  .gitignore
+  HELP.md
+  mvnw
+  mvnw.cmd
+  pomxml
+  user_service.iml
+External Libraries
+Scratches and Consoles
+
+
+
+a.5) in resources -> applicationproperties 	//alternative: use application.yml
+
+Objective: Define port using yml file or application.properties
+
+application.properties
+
+	server.port=9002
+
+
+----------------------
+
+application.yml
+server:
+  port:9002
+
+
+
+a.6) Run service
+
+UserSeviceApplication.java
+
+//Tomcat started on 9001
+//Spring stated
+
+
+
+
+a.7) 
+
+
+		a.7.1) Create endpoint
+				/contact/1344
+
+								//1344 is user's id, how to fetch this user's detail
+								//every user has contacts, we have to fetch for particular user
+			//Application starts from ContactServiceApplication
+		
+			//No need for User class here
+		
+		a.7.1.1) Create contact.java class in com.user.entity  //for List<Contact>
+			//What will this service do? perform operations related to Users , not contact
+									//List<Contact> is filled using different microservice
+
+	package com.user.entity;
+		...
+		public class Contact {
+		private Long cId;
+		private String email;
+		private String contactName;
+		private Long userId;
+		public Contact(Long cId, String email, String contactName, Long userId) {
+			this.cId = cId;
+			this.email = email;
+			this.contactName = contactName;
+			this.userId = userId;
+		}
+		public Contact() {
+		}
+	//getters
+		public Long getcId() {
+			return cId;
+		}
+	//...
+	//setters
+
+	//...
+		
+}
+
+
+	a.7.1.3)	Create package in com.user ===> com.user.service			//Create fake service
+
+		a.7.1.3.1) Create new interface: ContactService
+				//What does? takes id, returns all user contacts
+
+		package com.user.service;
+		import com.user.entity.User;
+
+				//Declare what methods we will need in UserService.java
+
+				//Create method that , takes input: user id, output:returns user object   //getUser(Long id);
+
+				public List<Contact> getContactsOfUser(Long userId);			//takes user id returns all contacts of that user
+
+			}
+
+
+		a.7.1.3.2) Create ContactServiceImpl.java
+
+		import com.user.entity.User; 
+		import java.util.List;
+
+		@Service
+		public class ContactServiceImpl implements ContactService {
+				//fake user list
+				List<Contact> list = List.of(									//List of User //List of contact already created in User.java 
+																	//this is fake, actually retrieved from database
+				 new Contact(1L, "amit@gmail.com", "Amit", 1311L),		//create users
+				 new Contact(2L, "anil@gmail.com","Anil" , 1311L),
+				 new Contact(3L, "rohan@gmail.com","Rohan", 1312L),
+				 new Contact(4L, "sameer@gmail.com","Sameer",1314L),
+				
+			);
+
+		@Override
+		public List<Contact> getContactsOfUser(Long userId) {		//returns passed userid's user data
+			return list.stream().filter(contact -> contact.getUserId().equals(userId)).collect(Collectors.toList());		//if contact user id matching with passed userId -> collect and return all contacts in list 
+	}	
+}
+
+
+
+
+	a.7.1.4) Create package com.contact.controller in com.user
+		    Create UserController class
+
+		package com.user.controller;
+
+		import org.springframework.web.bind.annotation.RequestMapping;
+		import org.springframework.web.bind.annotation.RestController;
+
+		@RestController
+		@RequestMapping("contact")			//this will work on /user fire
+		public class ContactController {
+		
+			@Autowired
+			private ContactService contactService							//Autowire for using the ContactService service
+
+			@RequestMapping("/user/{userId}")
+			public List<Contact> getContacts(@PathVariable("userId") Long userId) {		//how to fetch userId?@PathVariable variable							
+																		//how to use service? autowire
+				return this.contactService.getContactsOfUser(userId);					//O/P? user
+			}															//after autowiring we can return this.userService.getContactOfUser(userId);																	
+		}
+
+	a.7.1.5) check controller, entity, service
+			//TEST
+
+What project structure looks like
+user_service 
+	.idea
+	.mvn
+	 src
+		main
+		java
+		com.user
+		controller
+			UserController ,
+	 	entity
+			Contact
+			User
+		service
+			ContactService
+			ContactServiceImpl
+			ContactServiceApplicatio
+		resources
+			static
+			templates
+			applicationproperties
+			application.yml
+		test
+		target
+		.gitignore
+		HELP.md
+		mvnw
+		mvnw.cmd
+		pom.xm|
+		user_service.iml
+	External Libraries
+	Scratches and Consoles
+
+
+	a.7.1.6) Run project
+		UserServiceApplication.java
+		//Run ->
+
+	//Spring boot application will run on 9002 port
+//localhost:9002/contact/user/1311
+l
+
+      "cId": 1,
+
+      "email": "amit@gmail.com",
+      "contactName": "Amit",
+
+      "userId": 1311
+
+      "cId": 2,
+
+      "email": "anil@gmail.com",
+      "contactName": "Anil",
+
+	 "userId": 1311
+
+}
+
+]
+
+//contacts retrieved in list format
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+What we have:
+
+
+UserService    --> User list
+
+ContactService --> gives contact details for passed user id
+
+
+
+Problem: How to communicate between these 2 services?
+	i.e when fetching users -> fetch contacts as well  //in empty list contacts[] in UserService
+
+
+
+
+
